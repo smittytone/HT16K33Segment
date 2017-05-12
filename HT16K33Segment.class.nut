@@ -207,7 +207,7 @@ class HT16K33Segment {
         if (_debug) server.log("Brightness set to " + brightness);
 
         // Write the new brightness value to the HT16K33
-        _led.write(_ledAddress, brightness.tochar() + "\x00")
+        _led.write(_ledAddress, brightness.tochar() + "\x00");
     }
 
     function setDisplayFlash(flashRate = 0) {
