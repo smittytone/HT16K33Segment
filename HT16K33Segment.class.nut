@@ -17,7 +17,7 @@ class HT16K33Segment {
     // Written by Tony Smith (smittytone) 2014-16
     // Licence: MIT
 
-    static version = "1.3.0";
+    static version = "1.3.1";
 
     // Class properties; those defined in the Constructor must be null
     _buffer = null;
@@ -193,6 +193,9 @@ class HT16K33Segment {
         //    1. Integer brightness value: 0 (min. but not off) to 15 (max) Default: 15
         // Returns:
         //    Nothing
+        if (typeof brightness != "integer" && typeof brightness != "float") brightness = 15;
+        brightness = brightness.tointeger();
+
         if (brightness > 15) {
             brightness = 15;
             if (_debug) server.error("HT16K33Segment.setBrightness() brightness out of range (0-15)");
@@ -203,8 +206,8 @@ class HT16K33Segment {
             if (_debug) server.error("HT16K33Segment.setBrightness() brightness out of range (0-15)");
         }
 
-        brightness = brightness + 224;
         if (_debug) server.log("Brightness set to " + brightness);
+        brightness = brightness + 224;
 
         // Write the new brightness value to the HT16K33
         _led.write(_ledAddress, brightness.tochar() + "\x00");
