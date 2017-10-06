@@ -17,7 +17,7 @@ class HT16K33Segment {
     // Written by Tony Smith (smittytone) 2014-16
     // Licence: MIT
 
-    static version = "1.3.1";
+    static version = "1.3.2";
 
     // Class properties; those defined in the Constructor must be null
     _buffer = null;

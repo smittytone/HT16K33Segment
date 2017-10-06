@@ -1,4 +1,4 @@
-# HT16K33Segment 1.3.1
+# HT16K33Segment 1.3.2
 
 Hardware driver for [Adafruit 0.56-inch 4-digit, 7-segment LED display](http://www.adafruit.com/products/878) based on the Holtek HT16K33 controller. The LED communicates over any imp I&sup2;C bus.
 
@@ -13,20 +13,19 @@ The class incorporates its own (limited) character set, accessed through the fol
 
 ## Release Notes
 
+- 1.3.2
+    - Minor code change: rename constants to be class-specific
 - 1.3.1
-    - Streamline brightness control as per other HT16K33 libraries.
-
+    - Streamline brightness control as per other HT16K33 libraries
 - 1.3.0
     - Add *writeGlyph()* method to replace *writeChar()* to avoid confusion over method’s role
         - *writeChar()* still included so old code will not break
     - *init()* returns *this*; *init()* code errors fixed
     - Clarifications made to Read Me
-
 - 1.2.0
     - Add *setDisplayFlash()*
     - Add `return this;` missing from *writeNumber()*
     - *setBrightness()* code simplified; code that belongs in *init()* placed in that method
-
 - 1.1.0
     - From version 1.1.0, the methods *clearBuffer()*, *setColon()*, *writeChar()* and *writeNumber()* return the context object, *this*, allowing these methods to be chained. For example:
 
