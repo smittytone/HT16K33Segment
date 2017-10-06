@@ -1,14 +1,14 @@
 // CONSTANTS
 // HT16K33 registers and HT16K33-specific constants
-const HT16K33_REGISTER_DISPLAY_ON  = "\x81";
-const HT16K33_REGISTER_DISPLAY_OFF = "\x80";
-const HT16K33_REGISTER_SYSTEM_ON   = "\x21";
-const HT16K33_REGISTER_SYSTEM_OFF  = "\x20";
-const HT16K33_DISPLAY_ADDRESS      = "\x00";
-const HT16K33_I2C_ADDRESS          = 0x70;
-const HT16K33_BLANK_CHAR           = 16;
-const HT16K33_MINUS_CHAR           = 17;
-const HT16K33_CHAR_COUNT           = 17;
+const HT16K33_SEG_CLASS_REGISTER_DISPLAY_ON  = "\x81";
+const HT16K33_SEG_CLASS_REGISTER_DISPLAY_OFF = "\x80";
+const HT16K33_SEG_CLASS_REGISTER_SYSTEM_ON   = "\x21";
+const HT16K33_SEG_CLASS_REGISTER_SYSTEM_OFF  = "\x20";
+const HT16K33_SEG_CLASS_DISPLAY_ADDRESS      = "\x00";
+const HT16K33_SEG_CLASS_I2C_ADDRESS          = 0x70;
+const HT16K33_SEG_CLASS_BLANK_CHAR           = 16;
+const HT16K33_SEG_CLASS_MINUS_CHAR           = 17;
+const HT16K33_SEG_CLASS_CHAR_COUNT           = 17;
 
 class HT16K33Segment {
     // Hardware driver for Adafruit 0.56-inch 4-digit, 7-segment LED display
@@ -76,8 +76,8 @@ class HT16K33Segment {
         // Fills the buffer with a blank character, or the _digits[] character matrix whose index is provided
         // Returns:
         //    the instance (this)
-        if (clearChar < 0 || clearChar > HT16K33_CHAR_COUNT) {
-            clearChar = HT16K33_BLANK_CHAR;
+        if (clearChar < 0 || clearChar > HT16K33_SEG_CLASS_CHAR_COUNT) {
+            clearChar = HT16K33_SEG_CLASS_BLANK_CHAR;
             server.error("HT16K33Segment.clearBuffer() passed out-of-range character value (0-16)");
         }
 
@@ -166,7 +166,7 @@ class HT16K33Segment {
     function updateDisplay() {
         // Converts the row-indexed buffer[] values into a single, combined
         // string and writes it to the HT16K33 via I2C
-        local dataString = HT16K33_DISPLAY_ADDRESS;
+        local dataString = HT16K33_SEG_CLASS_DISPLAY_ADDRESS;
 
         for (local i = 0 ; i < 5 ; i++) {
             dataString = dataString + _buffer[i].tochar() + "\x00";
@@ -239,13 +239,13 @@ class HT16K33Segment {
 
     function powerDown() {
         if (_debug) server.log("Powering HT16K33Segment display down");
-        _led.write(_ledAddress, HT16K33_REGISTER_DISPLAY_OFF);
-        _led.write(_ledAddress, HT16K33_REGISTER_SYSTEM_OFF);
+        _led.write(_ledAddress, HT16K33_SEG_CLASS_REGISTER_DISPLAY_OFF);
+        _led.write(_ledAddress, HT16K33_SEG_CLASS_REGISTER_SYSTEM_OFF);
     }
 
     function powerUp() {
         if (_debug) server.log("Powering HT16K33Segment display up");
-        _led.write(_ledAddress, HT16K33_REGISTER_SYSTEM_ON);
-        _led.write(_ledAddress, HT16K33_REGISTER_DISPLAY_ON);
+        _led.write(_ledAddress, HT16K33_SEG_CLASS_REGISTER_SYSTEM_ON);
+        _led.write(_ledAddress, HT16K33_SEG_CLASS_REGISTER_DISPLAY_ON);
     }
 }
