@@ -14,10 +14,10 @@ class HT16K33Segment {
     // Hardware driver for Adafruit 0.56-inch 4-digit, 7-segment LED display
     // based on the Holtek HT16K33 controller.
     // The LED communicates over any imp I2C bus.
-    // Written by Tony Smith (smittytone) 2014-16
+    // Written by Tony Smith (smittytone) 2014-18
     // Licence: MIT
 
-    static version = "1.3.2";
+    static version = "1.3.3";
 
     // Class properties; those defined in the Constructor must be null
     _buffer = null;
@@ -25,6 +25,7 @@ class HT16K33Segment {
     _led = null;
     _ledAddress = 0;
     _debug = false;
+    _logger = null;
 
     constructor(i2cBus = null, i2cAddress = 0x70, debug = false) {
         // Parameters:
@@ -38,6 +39,11 @@ class HT16K33Segment {
         _led = i2cBus;
         _ledAddress = i2cAddress << 1;
         _debug = debug;
+
+        // Select logging target, which stored in '_logger', and will be 'seriallog' if 'seriallog.nut'
+        // has been loaded BEFORE HT16K33SegmentBig is instantiated on the device, otherwise it will be
+        // the imp API object 'server'
+        if ("seriallog" in getroottable()) { _logger = seriallog; } else { _logger = server; }
 
         // _buffer stores the character matrix values for each row of the display,
         // Including the center colon character
@@ -78,7 +84,7 @@ class HT16K33Segment {
         //    the instance (this)
         if (clearChar < 0 || clearChar > HT16K33_SEG_CLASS_CHAR_COUNT) {
             clearChar = HT16K33_SEG_CLASS_BLANK_CHAR;
-            server.error("HT16K33Segment.clearBuffer() passed out-of-range character value (0-16)");
+            _logger.error("HT16K33Segment.clearBuffer() passed out-of-range character value (0-16)");
         }
 
         // Put the clearCharacter into the buffer except row 2 (colon row)
@@ -118,17 +124,17 @@ class HT16K33Segment {
         // Returns:
         //    the instance (this)
         if (charVal < 0 || charVal > 255) {
-            server.error("HT16K33Segment.writeChar() character out of range (0-255)");
+            _logger.error("HT16K33Segment.writeChar() character out of range (0-255)");
             return this;
         }
 
         if (digit < 0 || digit > 4) {
-            server.error("HT16K33Segment.writeChar() chosen row out of range (0-4)");
+            _logger.error("HT16K33Segment.writeChar() chosen row out of range (0-4)");
             return this;
         }
 
         _buffer[digit] = hasDot ? (charVal | 0x80) : charVal;
-        if (_debug) server.log(format("Row %d set to character defined by 0x%02x %s", digit, charVal, (hasDot ? "with period" : "without period")));
+        if (_debug) _logger.log(format("Row %d set to character defined by 0x%02x %s", digit, charVal, (hasDot ? "with period" : "without period")));
 
         return this;
     }
@@ -143,17 +149,17 @@ class HT16K33Segment {
         // Returns:
         //    the instance (this)
         if (digit < 0 || digit > 4) {
-            server.error("HT16K33Segment.writeNumber() chosen row out of range (0-4)");
+            _logger.error("HT16K33Segment.writeNumber() chosen row out of range (0-4)");
             return this;
         }
 
         if (number < 0 || number > 17) {
-            server.error("HT16K33Segment.writeNumber() numeric character out of range (0x00-0x0F): " + number);
+            _logger.error("HT16K33Segment.writeNumber() numeric character out of range (0x00-0x0F): " + number);
             return this;
         }
 
         _buffer[digit] = hasDot ? (_digits[number] | 0x80) : _digits[number];
-        if (_debug) server.log(format("Row %d set to integer %d %s", digit, number, (hasDot ? "with period" : "without period")));
+        if (_debug) _logger.log(format("Row %d set to integer %d %s", digit, number, (hasDot ? "with period" : "without period")));
 
         return this;
     }
@@ -183,7 +189,7 @@ class HT16K33Segment {
         // Returns:
         //    the instance (this)
         _buffer[2] = set ? 0xFF : 0x00;
-        if (_debug) server.log(format("Colon set %s", (set ? "on" : "off")));
+        if (_debug) _logger.log(format("Colon set %s", (set ? "on" : "off")));
 
         return this;
     }
@@ -198,15 +204,15 @@ class HT16K33Segment {
 
         if (brightness > 15) {
             brightness = 15;
-            if (_debug) server.error("HT16K33Segment.setBrightness() brightness out of range (0-15)");
+            if (_debug) _logger.error("HT16K33Segment.setBrightness() brightness out of range (0-15)");
         }
 
         if (brightness < 0) {
             brightness = 0;
-            if (_debug) server.error("HT16K33Segment.setBrightness() brightness out of range (0-15)");
+            if (_debug) _logger.error("HT16K33Segment.setBrightness() brightness out of range (0-15)");
         }
 
-        if (_debug) server.log("Brightness set to " + brightness);
+        if (_debug) _logger.log("Brightness set to " + brightness);
         brightness = brightness + 224;
 
         // Write the new brightness value to the HT16K33
@@ -228,23 +234,23 @@ class HT16K33Segment {
         }
 
         if (match == -1) {
-            server.error("HT16K33Segment.setDisplayFlash() passed an invalid blink frequency");
+            _logger.error("HT16K33Segment.setDisplayFlash() passed an invalid blink frequency");
             return null;
         }
 
         match = 0x81 + (match << 1);
         _led.write(_ledAddress, match.tochar() + "\x00");
-        if (_debug) server.log(format("Display flash set to %d Hz", ((match - 0x81) >> 1)));
+        if (_debug) _logger.log(format("Display flash set to %d Hz", ((match - 0x81) >> 1)));
     }
 
     function powerDown() {
-        if (_debug) server.log("Powering HT16K33Segment display down");
+        if (_debug) _logger.log("Powering HT16K33Segment display down");
         _led.write(_ledAddress, HT16K33_SEG_CLASS_REGISTER_DISPLAY_OFF);
         _led.write(_ledAddress, HT16K33_SEG_CLASS_REGISTER_SYSTEM_OFF);
     }
 
     function powerUp() {
-        if (_debug) server.log("Powering HT16K33Segment display up");
+        if (_debug) _logger.log("Powering HT16K33Segment display up");
         _led.write(_ledAddress, HT16K33_SEG_CLASS_REGISTER_SYSTEM_ON);
         _led.write(_ledAddress, HT16K33_SEG_CLASS_REGISTER_DISPLAY_ON);
     }
