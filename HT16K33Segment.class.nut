@@ -17,7 +17,7 @@ class HT16K33Segment {
     // Written by Tony Smith (smittytone) 2014-18
     // Licence: MIT
 
-    static version = "1.3.3";
+    static version = "1.3.4";
 
     // Class properties; those defined in the Constructor must be null
     _buffer = null;
@@ -52,14 +52,12 @@ class HT16K33Segment {
         //    [ ]  [ ]     [ ]  [ ]
         //     -    -   .   -    -
         //    [ ]  [ ]  .  [ ]  [ ]
-        _buffer = [0x00, 0x00, 0x00, 0x00, 0x00];
+        _buffer = blob(5);
 
         // _digits store character matrices for 0-9, A-F, blank and minus
-        _digits = [
-            0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F,  // 0-9
-            0x5F, 0x7C, 0x58, 0x5E, 0x7B, 0x71,                          // A-F
-            0x00, 0x40                                                   // Space, minus sign
-        ];
+        _digits = "\x3F\x06\x5B\x4F\x66\x6D\x7D\x07\x7F\x6F"; // 0-9
+        _digits = _digits + "\x5F\x7C\x58\x5E\x7B\x71";       // A-F
+        _digits = _digits + "\x00\x40";                       // Space, minus sign
     }
 
     function init(character = 16, brightness = 15, showColon = false) {
@@ -92,7 +90,6 @@ class HT16K33Segment {
         _buffer[1] = _digits[clearChar];
         _buffer[3] = _digits[clearChar];
         _buffer[4] = _digits[clearChar];
-
         return this;
     }
 
@@ -144,7 +141,7 @@ class HT16K33Segment {
         // adding a decimal point if required
         // Parameters:
         //   1. The digit to be written to (0, 1, 3 or 4)
-        //   2. The integer index valur of the character required (0 - 17)
+        //   2. The integer index valur of the character required (0 - 16, 0-F)
         //   3. Boolean indicating whether the digit is followed by a period
         // Returns:
         //    the instance (this)
@@ -166,7 +163,7 @@ class HT16K33Segment {
 
     function clearDisplay() {
         // Convenience method to clear the display
-        clearBuffer().setColon(false).updateDisplay();
+        clearBuffer().setColon().updateDisplay();
     }
 
     function updateDisplay() {
@@ -182,7 +179,7 @@ class HT16K33Segment {
         _led.write(_ledAddress, dataString);
     }
 
-    function setColon(set) {
+    function setColon(set = false) {
         // Shows or hides the colon row (display row 2)
         // Parameter:
         //   1. Boolean indicating whether colon is shown (true) or hidden (false)
@@ -190,7 +187,6 @@ class HT16K33Segment {
         //    the instance (this)
         _buffer[2] = set ? 0xFF : 0x00;
         if (_debug) _logger.log(format("Colon set %s", (set ? "on" : "off")));
-
         return this;
     }
 
