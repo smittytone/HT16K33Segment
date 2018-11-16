@@ -1,4 +1,4 @@
-# HT16K33Segment 1.3.3 #
+# HT16K33Segment 1.3.4 #
 
 Hardware driver for [Adafruit 0.56-inch 4-digit, 7-segment LED display](http://www.adafruit.com/products/878) based on the Holtek HT16K33 controller. The LED communicates over any imp I&sup2;C bus.
 
@@ -10,31 +10,6 @@ The class incorporates its own (limited) character set, accessed through the fol
 - Characters A through F: codes 10 through 15
 - Space character: code 16
 - Minus character: code 17
-
-## Release Notes ##
-
-- 1.3.3
-    - Add support for [`seriallog.nut`](https://github.com/smittytone/generic/blob/master/seriallog.nut) to enable serial logging if the application makes use of it
-        - **Note** Class will log to *server.log()* if *seriallog* is not present
-- 1.3.2
-    - Minor code change: rename constants to be class-specific
-- 1.3.1
-    - Streamline brightness control as per other HT16K33 libraries
-- 1.3.0
-    - Add *writeGlyph()* method to replace *writeChar()* to avoid confusion over method’s role
-        - *writeChar()* still included so old code will not break
-    - *init()* returns *this*; *init()* code errors fixed
-    - Clarifications made to Read Me
-- 1.2.0
-    - Add *setDisplayFlash()*
-    - Add `return this;` missing from *writeNumber()*
-    - *setBrightness()* code simplified; code that belongs in *init()* placed in that method
-- 1.1.0
-    - From version 1.1.0, the methods *clearBuffer()*, *setColon()*, *writeChar()* and *writeNumber()* return the context object, *this*, allowing these methods to be chained. For example:
-
-```squirrel
-led.clearBuffer(17).setColon(true).writeChar(0, 0x6D).updateDisplay();
-```
 
 ## Class Usage ##
 
@@ -160,6 +135,33 @@ The display can be turned off by calling *powerDown()*.
 ### powerUp() ###
 
 The display can be turned on by calling *powerup()*.
+
+## Release Notes ##
+
+- 1.3.4 &mdash; *16 November 2018*
+    - Convert array to strings/blobs for better memory efficiency
+- 1.3.3 &mdash; *May 2018*
+    - Add support for [`seriallog.nut`](https://github.com/smittytone/generic/blob/master/seriallog.nut) to enable serial logging if the application makes use of it
+        - **Note** Class will log to *server.log()* if *seriallog* is not present
+- 1.3.2 &mdash; *October 2017*
+    - Minor code change: rename constants to be class-specific
+- 1.3.1 &mdash; *May 2017*
+    - Streamline brightness control as per other HT16K33 libraries
+- 1.3.0 &mdash; *April 2017*
+    - Add *writeGlyph()* method to replace *writeChar()* to avoid confusion over method’s role
+        - *writeChar()* still included so old code will not break
+    - *init()* returns *this*; *init()* code errors fixed
+    - Clarifications made to Read Me
+- 1.2.0
+    - Add *setDisplayFlash()*
+    - Add `return this;` missing from *writeNumber()*
+    - *setBrightness()* code simplified; code that belongs in *init()* placed in that method
+- 1.1.0
+    - From version 1.1.0, the methods *clearBuffer()*, *setColon()*, *writeChar()* and *writeNumber()* return the context object, *this*, allowing these methods to be chained. For example:
+
+```squirrel
+led.clearBuffer(17).setColon(true).writeChar(0, 0x6D).updateDisplay();
+```
 
 ## License ##
 
