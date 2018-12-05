@@ -1,4 +1,4 @@
-# HT16K33Segment 1.3.4 #
+# HT16K33Segment 1.4.0 #
 
 Hardware driver for [Adafruit 0.56-inch 4-digit, 7-segment LED display](http://www.adafruit.com/products/878) based on the Holtek HT16K33 controller. The LED communicates over any imp I&sup2;C bus.
 
@@ -10,6 +10,7 @@ The class incorporates its own (limited) character set, accessed through the fol
 - Characters A through F: codes 10 through 15
 - Space character: code 16
 - Minus character: code 17
+- Degree character: code 18 (from version 1.4.0)
 
 ## Class Usage ##
 
@@ -35,19 +36,9 @@ led.init();
 
 Call *init()* to bring up the display. All parameters are optional. The first is a character to display across all the digits; the default is no character. The *brightness* parameters is a value between 0 (low) and 15 (high); the default value is 15. Finally, *showColon* is a boolean: pass `true` to display the colon between digits 1 and 3, or `false` (the default);
 
-### clearBuffer(*[clearChar]*) ###
+### setBrightness(*[brightness]*) ###
 
-Call *clearBuffer()* to zero the class’ internal display buffer. If the optional *clearChar* parameter is not passed, no characters will be displayed. Pass a character code *(see [above](#characters))* to zero the display to a specific character.
-
-*clearBuffer()* does not update the display, only the buffer. Call *updateDisplay()* to refresh the LED.
-
-#### Example ####
-
-```squirrel
-// Set the display to -- --
-led.clearBuffer(17)
-   .updateDisplay();
-```
+To set the LED’s brightness (its duty cycle), call *setBrightness()* and pass an integer value between 0 (dim) and 15 (maximum brightness). If you don’t pass a value, the method will default to maximum brightness.
 
 ### setColon(*set*) ###
 
@@ -58,6 +49,17 @@ Call *setColon()* to specify whether the display’s center colon symbol is illu
 led.clearBuffer(17)
    .setColon(true)
    .updateDisplay();
+```
+
+### setDisplayFlash(*flashRate*) ###
+
+This method can be used to flash the display. The value passed into *flashRate* is the flash rate in Hertz. This value must be one of the following values, fixed by the HT16K33 controller: 0.5Hz, 1Hz or 2Hz. You can also pass in 0 to disable flashing, and this is the default value.
+
+#### Example ####
+
+```squirrel
+// Blink the display every second
+led.setDisplayFlash(1);
 ```
 
 ### writeGlyph(*digit, pattern[, hasDot]*) ###
@@ -105,6 +107,20 @@ led.writeNumber(0, 4)
    .updateDisplay();
 ```
 
+### clearBuffer(*[clearChar]*) ###
+
+Call *clearBuffer()* to zero the class’ internal display buffer. If the optional *clearChar* parameter is not passed, no characters will be displayed. Pass a character code *(see [above](#characters))* to zero the display to a specific character.
+
+*clearBuffer()* does not update the display, only the buffer. Call *updateDisplay()* to refresh the LED.
+
+#### Example ####
+
+```squirrel
+// Set the display to -- --
+led.clearBuffer(17)
+   .updateDisplay();
+```
+
 ### clearDisplay() ###
 
 Call *clearDisplay()* to completely wipe the display, including the colon. Unlike *clearBuffer()*, this method can’t be used to set all the segments to a specific character, but it does automatically update the display.
@@ -112,21 +128,6 @@ Call *clearDisplay()* to completely wipe the display, including the colon. Unlik
 ### updateDisplay() ###
 
 Call *updateDisplay()* after changing any or all of the internal display buffer contents in order to reflect those changes on the display itself.
-
-### setBrightness(*[brightness]*) ###
-
-To set the LED’s brightness (its duty cycle), call *setBrightness()* and pass an integer value between 0 (dim) and 15 (maximum brightness). If you don’t pass a value, the method will default to maximum brightness.
-
-### setDisplayFlash(*flashRate*) ###
-
-This method can be used to flash the display. The value passed into *flashRate* is the flash rate in Hertz. This value must be one of the following values, fixed by the HT16K33 controller: 0.5Hz, 1Hz or 2Hz. You can also pass in 0 to disable flashing, and this is the default value.
-
-#### Example ####
-
-```squirrel
-// Blink the display every second
-led.setDisplayFlash(1);
-```
 
 ### powerDown() ###
 
@@ -138,6 +139,9 @@ The display can be turned on by calling *powerup()*.
 
 ## Release Notes ##
 
+- 1.4.0 &mdash; *Unreleased*
+    - Re-organize code
+    - Add degree character
 - 1.3.4 &mdash; *16 November 2018*
     - Convert array to strings/blobs for better memory efficiency
 - 1.3.3 &mdash; *May 2018*
