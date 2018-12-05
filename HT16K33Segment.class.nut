@@ -149,6 +149,17 @@ class HT16K33Segment {
         }
     }
 
+    function setDebug(state = true) {
+        // Enable or disable extra debugging information
+        // Parameters:
+        //   1. Whether extra debugging information is shown. Default: true
+        // Returns:
+        //   Nothing
+
+        if (typeof state != "bool") state = true;
+        _debug = state;
+    }
+
     function writeGlyph(digit, glyphPattern, hasDot = false) {
         // Puts the input character matrix (an 8-bit integer) into the specified row,
         // adding a decimal point if required. Character matrix value is calculated by

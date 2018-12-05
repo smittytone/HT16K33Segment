@@ -62,6 +62,10 @@ This method can be used to flash the display. The value passed into *flashRate* 
 led.setDisplayFlash(1);
 ```
 
+### setDebug(*[state]*) ###
+
+Use this method to change whether the display logs extra debugging information (*state* is `true`) or does not (*state* is `false`). The default is `true`.
+
 ### writeGlyph(*digit, pattern[, hasDot]*) ###
 
 To write a character that is not in the character set *(see [above](#characters))* to a single digit, call *writeGlyph()* and pass the digit number (0, 1, 3 or 4) and a glyph-definition pattern as its parameters. You can also provide a third, optional parameter: a boolean value indicating whether the decimal point to the right of the specified digit should be illuminated. By default, the decimal point is not lit.
@@ -142,6 +146,7 @@ The display can be turned on by calling *powerup()*.
 - 1.4.0 &mdash; *Unreleased*
     - Re-organize code
     - Add degree character
+    - Add *setDebug()*
 - 1.3.4 &mdash; *16 November 2018*
     - Convert array to strings/blobs for better memory efficiency
 - 1.3.3 &mdash; *May 2018*
