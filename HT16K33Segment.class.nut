@@ -119,7 +119,7 @@ class HT16K33Segment {
         //   The instance
 
         if (typeof set != "bool") set = false;
-        _buffer[HT16K33_SEG_CLASS_056_COLON_ROW] = set ? 0xFF : 0x00;
+        _buffer[HT16K33_SEG_CLASS_LED_COLON_ROW] = set ? 0xFF : 0x00;
         if (_debug) _logger.log(format("Colon set %s", (set ? "on" : "off")));
 
         return this;
