@@ -143,7 +143,7 @@ The display can be turned on by calling *powerup()*.
 
 ## Release Notes ##
 
-- 1.4.0 &mdash; *Unreleased*
+- 1.4.0 &mdash; *19 December 2018*
     - Re-organize code
     - Add degree character
     - Add *setDebug()*
