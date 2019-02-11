@@ -230,7 +230,7 @@ class HT16K33Segment {
         }
 
         if (number < 0x00 || number > 0x0F) {
-            _logger.error("HT16K33Segment.writeNumber() number value out of range");
+            _logger.error("HT16K33Segment.writeNumber() number value out of range: " + number + " at " + digit);
             return this;
         }
 
