@@ -53,7 +53,7 @@ class HT16K33Segment {
      *
      *  @param {imp::i2c} impI2Cbus    - Whichever configured imp I2C bus is to be used for the HT16K33
      *  @param {integer}  [i2cAddress] - The HT16K33's I2C address. Default: 0x70
-     *  @param {bool}     [debug ]     - Set/unset to log/silence error messages. Default: false
+     *  @param {bool}     [debug ]     - Set/unset to log/silence extra debug messages. Default: false
      *  
      *  @returns {instance} The instance
      */
@@ -105,7 +105,7 @@ class HT16K33Segment {
     }
 
     /**
-     *  Initialize the segment LED display
+     *  Set the segment LED display brightness
      *
      *  @param {integer} [brightness] - The LED brightness in range 0 to 15. Default: 15
      * 
