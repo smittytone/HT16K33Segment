@@ -62,7 +62,7 @@ class HT16K33Segment {
      *  
      *  @returns {instance} The instance
      */
-    constructor(i2cBus = null, i2cAddress = 0x70, debug = false) {
+    constructor(i2cBus = null, i2cAddress = HT16K33_SEG_CLASS.DISPLAY_ADDRESS, debug = false) {
         if (i2cBus == null || i2cAddress == 0) throw "HT16K33Segment() requires a non-null imp I2C bus object and a non-zero I2C address";
         if (i2cAddress < 0x00 || i2cAddress > 0xFF) throw "HT16K33Segment() requires a valid I2C address";
 
