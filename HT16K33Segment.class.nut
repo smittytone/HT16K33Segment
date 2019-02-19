@@ -1,22 +1,27 @@
 /**
  * HT16K33 registers and HT16K33-specific variables
+ * 
+ * @enum
+ *
  */ 
-const HT16K33_SEG_CLASS_REGISTER_DISPLAY_ON  = "\x81";
-const HT16K33_SEG_CLASS_REGISTER_DISPLAY_OFF = "\x80";
-const HT16K33_SEG_CLASS_REGISTER_SYSTEM_ON   = "\x21";
-const HT16K33_SEG_CLASS_REGISTER_SYSTEM_OFF  = "\x20";
-const HT16K33_SEG_CLASS_DISPLAY_ADDRESS      = "\x00";
-const HT16K33_SEG_CLASS_I2C_ADDRESS          = 0x70;
-const HT16K33_SEG_CLASS_BLANK_CHAR           = 16;
-const HT16K33_SEG_CLASS_MINUS_CHAR           = 17;
-const HT16K33_SEG_CLASS_DEGREE_CHAR          = 18;
-const HT16K33_SEG_CLASS_CHAR_COUNT           = 19;
-
-/**
- * Display specific constants
- */
-const HT16K33_SEG_CLASS_LED_MAX_ROWS         = 4;
-const HT16K33_SEG_CLASS_LED_COLON_ROW        = 2;
+enum  HT16K33_SEG_CLASS {
+        // Command registers
+        REGISTER_DISPLAY_ON  = "\x81",
+        REGISTER_DISPLAY_OFF = "\x80",
+        REGISTER_SYSTEM_ON   = "\x21",
+        REGISTER_SYSTEM_OFF  = "\x20",
+        // Display hardware settings
+        DISPLAY_ADDRESS      = "\x00",
+        I2C_ADDRESS          = 0x70,
+        // Character constants
+        BLANK_CHAR           = 16,
+        MINUS_CHAR           = 17,
+        DEGREE_CHAR          = 18,
+        CHAR_COUNT           = 19,
+        // Display specific constants
+        LED_MAX_ROWS         = 4,
+        LED_COLON_ROW        = 2
+}
 
 /**
  * Hardware driver for Adafruit 0.56-inch 4-digit, 7-segment LED display based on the Holtek HT16K33 controller.
@@ -96,7 +101,7 @@ class HT16K33Segment {
      *
      *  @returns {intance} this  
      */
-    function init(character = HT16K33_SEG_CLASS_BLANK_CHAR, brightness = 15, showColon = false) {
+    function init(character = HT16K33_SEG_CLASS.BLANK_CHAR, brightness = 15, showColon = false) {
         powerUp();
         setBrightness(brightness);
         clearBuffer(character);
@@ -140,7 +145,7 @@ class HT16K33Segment {
      */
     function setColon(set = true) {
         if (typeof set != "bool") set = true;
-        _buffer[HT16K33_SEG_CLASS_LED_COLON_ROW] = set ? 0xFF : 0x00;
+        _buffer[HT16K33_SEG_CLASS.LED_COLON_ROW] = set ? 0xFF : 0x00;
         if (_debug) _logger.log(format("Colon set %s", (set ? "on" : "off")));
         return this;
     }
@@ -199,7 +204,7 @@ class HT16K33Segment {
             return this;
         }
 
-        if (digit < 0 || digit > HT16K33_SEG_CLASS_LED_MAX_ROWS || digit == HT16K33_SEG_CLASS_LED_COLON_ROW) {
+        if (digit < 0 || digit > HT16K33_SEG_CLASS.LED_MAX_ROWS || digit == HT16K33_SEG_CLASS.LED_COLON_ROW) {
             _logger.error("HT16K33Segment.writeGlyph() row value out of range");
             return this;
         }
@@ -224,7 +229,7 @@ class HT16K33Segment {
      *
      */
     function writeNumber(digit, number, hasDot = false) {
-        if (digit < 0 || digit > HT16K33_SEG_CLASS_LED_MAX_ROWS || digit == HT16K33_SEG_CLASS_LED_COLON_ROW) {
+        if (digit < 0 || digit > HT16K33_SEG_CLASS.LED_MAX_ROWS || digit == HT16K33_SEG_CLASS.LED_COLON_ROW) {
             _logger.error("HT16K33Segment.writeNumber() row value out of range");
             return this;
         }
@@ -247,9 +252,9 @@ class HT16K33Segment {
      *  @returns {intance} this
      *
      */
-    function clearBuffer(character = HT16K33_SEG_CLASS_BLANK_CHAR) {
-        if (character < 0 || character > HT16K33_SEG_CLASS_CHAR_COUNT - 1) {
-            character = HT16K33_SEG_CLASS_BLANK_CHAR;
+    function clearBuffer(character = HT16K33_SEG_CLASS.BLANK_CHAR) {
+        if (character < 0 || character > HT16K33_SEG_CLASS.CHAR_COUNT - 1) {
+            character = HT16K33_SEG_CLASS.BLANK_CHAR;
             _logger.error("HT16K33Segment.clearBuffer() character value out of range");
         }
 
@@ -275,7 +280,7 @@ class HT16K33Segment {
      *
      */
     function updateDisplay() {
-        local dataString = HT16K33_SEG_CLASS_DISPLAY_ADDRESS;
+        local dataString = HT16K33_SEG_CLASS.DISPLAY_ADDRESS;
         for (local i = 0 ; i < 5 ; i++) dataString += _buffer[i].tochar() + "\x00";
         _led.write(_ledAddress, dataString);
     }
@@ -286,8 +291,8 @@ class HT16K33Segment {
      */
     function powerDown() {
         if (_debug) _logger.log("Powering HT16K33Segment display down");
-        _led.write(_ledAddress, HT16K33_SEG_CLASS_REGISTER_DISPLAY_OFF);
-        _led.write(_ledAddress, HT16K33_SEG_CLASS_REGISTER_SYSTEM_OFF);
+        _led.write(_ledAddress, HT16K33_SEG_CLASS.REGISTER_DISPLAY_OFF);
+        _led.write(_ledAddress, HT16K33_SEG_CLASS.REGISTER_SYSTEM_OFF);
     }
 
     /**
@@ -296,8 +301,8 @@ class HT16K33Segment {
      */
     function powerUp() {
         if (_debug) _logger.log("Powering HT16K33Segment display up");
-        _led.write(_ledAddress, HT16K33_SEG_CLASS_REGISTER_SYSTEM_ON);
-        _led.write(_ledAddress, HT16K33_SEG_CLASS_REGISTER_DISPLAY_ON);
+        _led.write(_ledAddress, HT16K33_SEG_CLASS.REGISTER_SYSTEM_ON);
+        _led.write(_ledAddress, HT16K33_SEG_CLASS.REGISTER_DISPLAY_ON);
     }
 
     /**
