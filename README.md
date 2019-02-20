@@ -44,6 +44,8 @@ To set the LED’s brightness (its duty cycle), call *setBrightness()* and pass 
 
 Call *setColon()* to specify whether the display’s center colon symbol is illuminated (`true`) or not (`false`).
 
+#### Example ####
+
 ```squirrel
 // Set the display to --:--
 led.clearBuffer(17)
@@ -84,6 +86,8 @@ Calculate the glyph pattern value using the following chart. The segment number 
 ```
 
 For example, to define the letter 'P', we need to set segments 0, 1, 4, 5 and 6. In bit form that makes 0x73, and this is the value passed into *pattern*.
+
+#### Example ####
 
 ```squirrel
 // Display 'SYNC' on the LED
