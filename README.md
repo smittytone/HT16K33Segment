@@ -147,7 +147,7 @@ The display can be turned on by calling *powerup()*.
 
 ## Release Notes ##
 
-- 2.0.0 &mdash; *unreleased*
+- 2.0.0 &mdash; *01 March 2019*
     - Namespace constants using an enumeration **breaking change**
     - Change *setColon()* default from `false` to `true`
     - *version* property is now *VERSION*
