@@ -1,4 +1,4 @@
-# HT16K33Segment 2.0.0 #
+# HT16K33Segment 2.0.1 #
 
 Hardware driver for [Adafruit 0.56-inch 4-digit, 7-segment LED display](http://www.adafruit.com/products/878) based on the Holtek HT16K33 controller. The LED communicates over any imp I&sup2;C bus.
 
@@ -147,6 +147,8 @@ The display can be turned on by calling *powerup()*.
 
 ## Release Notes ##
 
+- 2.0.1 &mdash; *unreleased*
+    - Add I&sup2;C error logging
 - 2.0.0 &mdash; *01 March 2019*
     - Namespace constants using an enumeration **breaking change**
     - Change *setColon()* default from `false` to `true`

@@ -23,6 +23,7 @@ enum  HT16K33_SEG_CLASS {
         LED_COLON_ROW        = 2
 }
 
+
 /**
  * Hardware driver for Adafruit 0.56-inch 4-digit, 7-segment LED display based on the Holtek HT16K33 controller.
  * For example: http://www.adafruit.com/products/1854
@@ -41,7 +42,7 @@ class HT16K33Segment {
      * @property {string} VERSION - The library version
      * 
      */    
-    static VERSION = "2.0.0";
+    static VERSION = "2.0.1";
 
     // *********** Private Properties **********
 
@@ -286,7 +287,8 @@ class HT16K33Segment {
     function updateDisplay() {
         local dataString = HT16K33_SEG_CLASS.DISPLAY_ADDRESS;
         for (local i = 0 ; i < 5 ; i++) dataString += _buffer[i].tochar() + "\x00";
-        _led.write(_ledAddress, dataString);
+        local result = _led.write(_ledAddress, dataString);
+        if (result != 0) _logger.error("HT16K33Segment I2C error: " + _i2cerr(result));
     }
 
     /**
@@ -318,5 +320,35 @@ class HT16K33Segment {
     function setDebug(state = true) {
         if (typeof state != "bool") state = true;
         _debug = state;
+    }
+
+    /**
+     *  Get an I2C error string
+     *
+     *  @param {int} code — The error code
+     *
+     *  @returns {string} The error message
+     *
+     *  @private
+     *
+     */
+    function _i2cerr(code) {
+        local errors = [
+            "MASTER_SELECT_ERROR", 
+            "TRANSMIT_SELECT_ERROR",
+            "TRANSMIT_ERROR",
+            "BTF_ERROR",
+            "STOP_ERROR",
+            "ADDR_CLEAR_ERROR",
+            "ADDR_RXNE_ERROR",
+            "DATA_RXNE_ERROR",
+            "SLAVE_NACKED_ERROR",
+            "MASTER_RECEIVE_SELECT_ERROR",
+            "RECEIVE_ERROR",
+            "RESELECT_ERROR",
+            "NOT_ENABLED" ];
+        code = 0 - code;
+        if (err >= 1 && err <= 13) return errors[code];
+        return format("UNKNOWN (%d)", code);
     }
 }
