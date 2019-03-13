@@ -348,7 +348,7 @@ class HT16K33Segment {
             "RESELECT_ERROR",
             "NOT_ENABLED" ];
         code = 0 - code;
-        if (err >= 1 && err <= 13) return errors[code];
+        if (code >= 1 && code <= 13) return errors[code];
         return format("UNKNOWN (%d)", code);
     }
 }
