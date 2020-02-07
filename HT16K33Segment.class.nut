@@ -1,9 +1,9 @@
 /**
  * HT16K33 registers and HT16K33-specific variables
- * 
+ *
  * @enum
  *
- */ 
+ */
 enum  HT16K33_SEG_CLASS {
         // Command registers
         REGISTER_DISPLAY_ON  = "\x81",
@@ -37,11 +37,11 @@ enum  HT16K33_SEG_CLASS {
  *
  */
 class HT16K33Segment {
-    
+
     /**
      * @property {string} VERSION - The library version
-     * 
-     */    
+     *
+     */
     static VERSION = "2.0.1";
 
     // *********** Private Properties **********
@@ -61,7 +61,7 @@ class HT16K33Segment {
      *  @param {imp::i2c} impI2Cbus    - Whichever configured imp I2C bus is to be used for the HT16K33
      *  @param {integer}  [i2cAddress] - The HT16K33's I2C address. Default: 0x70
      *  @param {bool}     [debug ]     - Set/unset to log/silence extra debug messages. Default: false
-     *  
+     *
      *  @returns {instance} The instance
      *
      */
@@ -71,7 +71,7 @@ class HT16K33Segment {
 
         _led = i2cBus;
         _ledAddress = i2cAddress << 1;
-        
+
         if (typeof debug != "bool") debug = false;
         _debug = debug;
 
@@ -91,8 +91,8 @@ class HT16K33Segment {
 
         // _digits store character matrices for 0-9, A-F, blank and minus
         _digits = "\x3F\x06\x5B\x4F\x66\x6D\x7D\x07\x7F\x6F"; // 0-9
-        _digits = _digits + "\x5F\x7C\x58\x5E\x7B\x71";       // A-F
-        _digits = _digits + "\x00\x40\x63";                   // Space, minus, degree signs
+        _digits += "\x5F\x7C\x58\x5E\x7B\x71";       // A-F
+        _digits += "\x00\x40\x63";                   // Space, minus, degree signs
     }
 
     /**
@@ -102,7 +102,7 @@ class HT16K33Segment {
      *  @param {integer} [brightness] - The LED brightness in range 0 to 15. Default: 15
      *  @param {bool}    [showColon]  - Whether the central colon should be lit. Default: false
      *
-     *  @returns {intance} this  
+     *  @returns {intance} this
      *
      */
     function init(character = HT16K33_SEG_CLASS.BLANK_CHAR, brightness = 15, showColon = false) {
@@ -117,7 +117,7 @@ class HT16K33Segment {
      *  Set the segment LED display brightness
      *
      *  @param {integer} [brightness] - The LED brightness in range 0 to 15. Default: 15
-     * 
+     *
      */
     function setBrightness(brightness = 15) {
         if (typeof brightness != "integer" && typeof brightness != "float") brightness = 15;
@@ -134,7 +134,7 @@ class HT16K33Segment {
         }
 
         if (_debug) _logger.log("Brightness set to " + brightness);
-        brightness = brightness + 224;
+        brightness += 224;
 
         // Write the new brightness value to the HT16K33
         _led.write(_ledAddress, brightness.tochar() + "\x00");
@@ -146,7 +146,7 @@ class HT16K33Segment {
      *  @param {bool} [showColon] - Whether the central colon should be lit. Default: true
      *
      *  @returns {intance} this
-     * 
+     *
      */
     function setColon(set = true) {
         if (typeof set != "bool") set = true;
@@ -159,7 +159,7 @@ class HT16K33Segment {
      *  Set the segment LED to flash at one of three pre-defined rates
      *
      *  @param {integer} [flashRate] - Flash rate in Herz. Must be 0.5, 1 or 2 for a flash, or 0 for no flash. Default: 0
-     * 
+     *
      */
     function setDisplayFlash(flashRate = 0) {
         local values = [0, 2, 1, 0.5];
@@ -194,7 +194,7 @@ class HT16K33Segment {
      *     4 |   | 2
      *       | _ |
      *         3
-     * 
+     *
      *
      *  @param {integer} [digit]        - The display digit to be written to (0 - 4)
      *  @param {integer} [glyphPattern] - The integer index value of the character required
@@ -213,7 +213,7 @@ class HT16K33Segment {
             _logger.error("HT16K33Segment.writeGlyph() row value out of range");
             return this;
         }
-        
+
         _buffer[digit] = hasDot ? (glyphPattern | 0x80) : glyphPattern;
         if (_debug) _logger.log(format("Row %d set to character defined by pattern 0x%02x %s", digit, glyphPattern, (hasDot ? "with period" : "without period")));
         return this;
@@ -293,7 +293,7 @@ class HT16K33Segment {
 
     /**
      *  Turn the segment LED display off
-     * 
+     *
      */
     function powerDown() {
         if (_debug) _logger.log("Powering HT16K33Segment display down");
@@ -303,7 +303,7 @@ class HT16K33Segment {
 
     /**
      *  Turn the segment LED display on
-     * 
+     *
      */
     function powerUp() {
         if (_debug) _logger.log("Powering HT16K33Segment display up");
@@ -315,7 +315,7 @@ class HT16K33Segment {
      *  Set the segment LED display to log extra debug info
      *
      *  @param {bool} [state] - Whether extra debugging is enabled (true) or not (false). Default: true
-     *  
+     *
      */
     function setDebug(state = true) {
         if (typeof state != "bool") state = true;
@@ -334,7 +334,7 @@ class HT16K33Segment {
      */
     function _i2cerr(code) {
         local errors = [
-            "MASTER_SELECT_ERROR", 
+            "MASTER_SELECT_ERROR",
             "TRANSMIT_SELECT_ERROR",
             "TRANSMIT_ERROR",
             "BTF_ERROR",
