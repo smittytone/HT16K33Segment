@@ -147,26 +147,26 @@ The display can be turned on by calling *powerup()*.
 
 ## Release Notes ##
 
-- 2.0.1 &mdash; *unreleased*
+- 2.0.1 *7 February 2020*
     - Add I&sup2;C error logging
-- 2.0.0 &mdash; *01 March 2019*
+- 2.0.0 *01 March 2019*
     - Namespace constants using an enumeration **breaking change**
     - Change *setColon()* default from `false` to `true`
     - *version* property is now *VERSION*
-- 1.4.0 &mdash; *19 December 2018*
+- 1.4.0 *19 December 2018*
     - Re-organize code
     - Add degree character
     - Add *setDebug()*
-- 1.3.4 &mdash; *16 November 2018*
+- 1.3.4 *16 November 2018*
     - Convert array to strings/blobs for better memory efficiency
-- 1.3.3 &mdash; *May 2018*
+- 1.3.3 *May 2018*
     - Add support for [`seriallog.nut`](https://github.com/smittytone/generic/blob/master/seriallog.nut) to enable serial logging if the application makes use of it
         - **Note** Class will log to *server.log()* if *seriallog* is not present
-- 1.3.2 &mdash; *October 2017*
+- 1.3.2 *October 2017*
     - Minor code change: rename constants to be class-specific
-- 1.3.1 &mdash; *May 2017*
+- 1.3.1 *May 2017*
     - Streamline brightness control as per other HT16K33 libraries
-- 1.3.0 &mdash; *April 2017*
+- 1.3.0 *April 2017*
     - Add *writeGlyph()* method to replace *writeChar()* to avoid confusion over method’s role
         - *writeChar()* still included so old code will not break
     - *init()* returns *this*; *init()* code errors fixed
