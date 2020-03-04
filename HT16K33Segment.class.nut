@@ -4,7 +4,7 @@
  * @enum
  *
  */
-enum  HT16K33_SEG_CLASS {
+enum HT16K33_SEG_CLASS {
         // Command registers
         REGISTER_DISPLAY_ON  = "\x81",
         REGISTER_DISPLAY_OFF = "\x80",
